@@ -4,12 +4,14 @@ using UnityEngine;
 public class BallControl : MonoBehaviour
 {
     public static event Action OnBallLost;
+    public static event Action OnShot;
     public float power = 5f;
     private Rigidbody2D rb;
     private LineRenderer lr;
     Vector2 dragStartPos;
     Vector2 referencePos;
     private bool isShooting = false;
+    private bool isGone = false;
     private void Start()
     {
         referencePos = transform.position;
@@ -18,6 +20,15 @@ public class BallControl : MonoBehaviour
         rb.isKinematic = true;
     }
 
+    private void OnEnable()
+    {
+        GameController.NewTurn += ResetBall;
+    }
+
+    private void OnDisable()
+    {
+        GameController.NewTurn -= ResetBall;
+    }
     private void Update()
     {
         if (!isShooting)
@@ -50,23 +61,25 @@ public class BallControl : MonoBehaviour
                 Vector2 _velocity = (dragEndPos - dragStartPos) * power;
                 rb.velocity = _velocity;
                 lr.positionCount = 0;
+                OnShot?.Invoke();
             }
         }
-        
-        if (!transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
+
+        if (!isGone && !transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
         {
-            ResetBall();
+            Debug.Log("gone!");
+            isGone = true; // so we don't spam this all the time
+            OnBallLost?.Invoke();
         }
     }
 
     private void ResetBall()
     {
-        Debug.Log("gone!");
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
         transform.position = referencePos;
-        OnBallLost?.Invoke();
         isShooting = false;
+        isGone = false;
     }
     public Vector2[] Plot(Rigidbody2D rigidbody, Vector2 pos, Vector2 velocity, int steps, float stepDistance)
     {

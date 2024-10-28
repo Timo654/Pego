@@ -13,7 +13,6 @@ public class BasketMove : MonoBehaviour
     {
         var hitLeft = Physics2D.Raycast(transform.position, Vector2.left);
         var hitRight = Physics2D.Raycast(transform.position, Vector2.right);
-        Debug.Log(hitLeft.point + " and " + hitRight.point);
         leftTarget = new Vector2(hitLeft.point.x + 0.3f, transform.position.y);
         rightTarget = new Vector2(hitRight.point.x - 1.2f, transform.position.y);
         var colliders = GetComponents<BoxCollider2D>();
