@@ -12,6 +12,7 @@ public class BallControl : MonoBehaviour
     Vector2 referencePos;
     private bool isShooting = false;
     private bool isGone = false;
+    private bool hasBeenVisible = false;
     private void Start()
     {
         referencePos = transform.position;
@@ -31,6 +32,10 @@ public class BallControl : MonoBehaviour
     }
     private void Update()
     {
+        if (!hasBeenVisible && transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
+        {
+            hasBeenVisible = true;
+        }
         if (!isShooting)
         {
             if (Input.GetMouseButtonDown(0))
@@ -65,7 +70,7 @@ public class BallControl : MonoBehaviour
             }
         }
 
-        if (!isGone && !transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
+        if (!isGone && hasBeenVisible && !transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
         {
             Debug.Log("gone!");
             isGone = true; // so we don't spam this all the time
