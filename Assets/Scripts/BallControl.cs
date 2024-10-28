@@ -13,9 +13,11 @@ public class BallControl : MonoBehaviour
     private bool isShooting = false;
     private bool isGone = false;
     private bool hasBeenVisible = false;
+    private Vector3 defaultScale;
     private void Start()
     {
         referencePos = transform.position;
+        defaultScale = transform.localScale;
         rb = GetComponent<Rigidbody2D>();
         lr = GetComponent<LineRenderer>();
         rb.isKinematic = true;
@@ -24,11 +26,25 @@ public class BallControl : MonoBehaviour
     private void OnEnable()
     {
         GameController.NewTurn += ResetBall;
+        GameController.SpecialMode += TurnBig;
+    }
+
+    private void TurnBig(bool enabled)
+    {
+        if (enabled)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            transform.localScale = defaultScale;
+        }
     }
 
     private void OnDisable()
     {
         GameController.NewTurn -= ResetBall;
+        GameController.SpecialMode -= TurnBig;
     }
     private void Update()
     {
@@ -90,7 +106,7 @@ public class BallControl : MonoBehaviour
     {
         Vector2[] results = new Vector2[steps];
         float timestep = Time.fixedDeltaTime / Physics2D.velocityIterations * stepDistance;
-        Vector2 gravityAccel = Physics2D.gravity * rigidbody.gravityScale * timestep * timestep;
+        Vector2 gravityAccel = rigidbody.gravityScale * timestep * timestep * Physics2D.gravity;
         float drag = 1f - timestep * rigidbody.drag;
         Vector2 moveStep = velocity * timestep;
 
