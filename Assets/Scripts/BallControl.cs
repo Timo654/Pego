@@ -82,6 +82,7 @@ public class BallControl : MonoBehaviour
                 Vector2 _velocity = (dragEndPos - dragStartPos) * power;
                 rb.velocity = _velocity;
                 lr.positionCount = 0;
+                rb.constraints = RigidbodyConstraints2D.None;
                 OnShot?.Invoke();
             }
         }
@@ -97,6 +98,8 @@ public class BallControl : MonoBehaviour
     private void ResetBall()
     {
         rb.velocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.rotation = 0f;
         rb.isKinematic = true;
         transform.position = referencePos;
         isShooting = false;
