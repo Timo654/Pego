@@ -14,7 +14,6 @@ public class UIController : MonoBehaviour
     private void OnEnable()
     {
         GameController.OnScoreUpdated += UpdateScore;
-        GameController.OnBallsUpdated += UpdateBalls;
         GameController.MercyTime += HandleMercy;
         GameController.GameOver += HandleGameOver;
     }
@@ -22,7 +21,6 @@ public class UIController : MonoBehaviour
     private void OnDisable()
     {
         GameController.OnScoreUpdated -= UpdateScore;
-        GameController.OnBallsUpdated -= UpdateBalls;
         GameController.MercyTime -= HandleMercy;
         GameController.GameOver -= HandleGameOver;
     }
@@ -51,10 +49,6 @@ public class UIController : MonoBehaviour
         infoText.gameObject.SetActive(true);
         yield return new WaitForSeconds(duration);
         infoText.gameObject.SetActive(false);
-    }
-    private void UpdateBalls(int count)
-    {
-        ballText.text = $"Balls: {count}";
     }
 
     private void UpdateScore(int score)
