@@ -1,11 +1,13 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] Transform pegs;
-    [SerializeField] int balls = 5;
-    [SerializeField] int specialCount = 2;
+    [SerializeField] SpriteRenderer background;
+    private int balls;
+    [SerializeField] private LevelData debugLevel;
     private int bonusCount = 1; // can always be only one
     public static event Action NewTurn;
     public static Action<bool> SpecialMode;
@@ -20,6 +22,7 @@ public class GameController : MonoBehaviour
     private int pegsLeft;
     private int redsLeft;
     private int specialRounds = 0;
+    
     private void OnEnable()
     {
         BallControl.OnShot += RemoveBall;
@@ -153,17 +156,24 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetupGame();
+        SetupGame(debugLevel);
     }
 
-    private void SetupGame()
+    private void SetupGame(LevelData levelData)
     {
+        background.sprite = levelData.backgroundImage;
+        balls = levelData.ballCount;
+        if (pegs != null)
+        {
+            Destroy(pegs.gameObject);
+        }
+        pegs = Instantiate(levelData.levelObjects).transform;
         OnBallsUpdated?.Invoke(balls);
         OnScoreUpdated?.Invoke(score);
         pegsLeft = pegs.childCount;
         redsLeft = pegs.childCount / 2;
         RandomizePeg(redsLeft, PegType.Red);
-        RandomizePeg(specialCount, PegType.Special);
+        RandomizePeg(levelData.specialCount, PegType.Special);
         RandomizeBonus();
     }
 }
