@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameController : MonoBehaviour
     public static event Action<int> OnBallsUpdated;
     public static event Action<int> OnScoreUpdated;
     public static event Action<bool> MercyTime;
-    public static event Action GameOver;
+    public static event Action<GameOverType> GameOver;
     private int score;
     private bool hasHitDuringRound = false;
     private PegObject currentBonus;
@@ -20,7 +21,8 @@ public class GameController : MonoBehaviour
     private int pegsLeft;
     private int redsLeft;
     private int specialRounds = 0;
-
+    private bool gameOver = false;
+    private bool isBadEnd = false;
     private void OnEnable()
     {
         BallControl.OnShot += RemoveBall;
@@ -28,6 +30,13 @@ public class GameController : MonoBehaviour
         BasketMove.OnBallCaught += AddBall;
         PegObject.OnPegPopped += AddScore;
         LevelChanger.OnGameplayLevelLoaded += SetupGame;
+        GameOver += SetGameOver;
+    }
+
+    private void SetGameOver(GameOverType type)
+    {
+        isBadEnd = type == GameOverType.OutOfBalls;
+        gameOver = true;
     }
 
     private void HandleTurnEnd()
@@ -45,12 +54,13 @@ public class GameController : MonoBehaviour
         if (balls == 0)
         {
             Debug.Log($"GAME OVER!!! Score: {score}, red {redsLeft}, all {pegsLeft}");
-            GameOver?.Invoke();
+            GameOver?.Invoke(GameOverType.OutOfBalls);
         }
-        else if (pegsLeft == 0) // could also do with red?
+        else if (redsLeft == 0) // could also do with red?
         {
             AddScoreForBalls();
-            GameOver?.Invoke();
+            if (pegsLeft == 0) GameOver?.Invoke(GameOverType.GotAll);
+            else GameOver?.Invoke(GameOverType.GotAllRed);
         }
         else
         {
@@ -63,8 +73,6 @@ public class GameController : MonoBehaviour
             hasHitDuringRound = false;
             RandomizeBonus();
         }
-
-
     }
 
     private void AddScoreForBalls()
@@ -118,6 +126,7 @@ public class GameController : MonoBehaviour
         BasketMove.OnBallCaught -= AddBall;
         PegObject.OnPegPopped -= AddScore;
         LevelChanger.OnGameplayLevelLoaded -= SetupGame;
+        GameOver -= SetGameOver;
     }
 
     private void RandomizePeg(int pegCount, PegType pegType)
@@ -172,6 +181,31 @@ public class GameController : MonoBehaviour
         RandomizePeg(redsLeft, PegType.Red);
         RandomizePeg(levelData.specialCount, PegType.Special);
         RandomizeBonus();
-        //LevelChanger.Instance.FadeIn();
     }
+
+
+    // TODO - use new input system maybe to avoid this mess !!!
+    private void Update()
+    {
+        if (gameOver && Input.GetKeyDown(KeyCode.B))
+        {
+            if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(SaveManager.Instance.runtimeData.currentLevel);
+            gameOver = false;
+            if (SaveManager.Instance.runtimeData.currentLevel != null)
+            {
+                LevelChanger.Instance.FadeToLevel(SceneManager.GetActiveScene().name);
+            }
+            else
+            {
+                LevelChanger.Instance.FadeToLevel("EndingScene");
+            }  
+        }
+    }
+}
+
+public enum GameOverType
+{
+    OutOfBalls,
+    GotAllRed,
+    GotAll
 }

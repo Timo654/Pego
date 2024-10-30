@@ -27,9 +27,23 @@ public class UIController : MonoBehaviour
         GameController.GameOver -= HandleGameOver;
     }
 
-    private void HandleGameOver()
+    private void HandleGameOver(GameOverType type)
     {
-        StartCoroutine(ShowInfoText("Game over...", 10f));
+        string msg = "Game over...";
+        switch (type)
+        {
+            case GameOverType.OutOfBalls:
+                msg = "Game over...\nRan out of balls.\nPress B to retry...";
+                break;
+            case GameOverType.GotAllRed:
+                msg = "Congratulations!\nGot all reds!\nPress B to continue.";
+                break;
+            case GameOverType.GotAll:
+                msg = "Amazing!\nLevel cleared!\nPress B to continue.";
+                break;
+        }
+        StartCoroutine(ShowInfoText(msg, 10f));
+        // TODO - let the user continue somehow
     }
 
     private void HandleMercy(bool hasMercy)

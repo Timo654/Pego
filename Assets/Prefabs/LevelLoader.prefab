@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionTime: 1
-  debugLevelData: {fileID: 11400000, guid: edfc8d99b7a77b349b93071f1ca43960, type: 2}
+  debugLevelData: {fileID: 11400000, guid: 3c1ea52a81433414db912c47b92bfafa, type: 2}
   levels:
-  - {fileID: 11400000, guid: edfc8d99b7a77b349b93071f1ca43960, type: 2}
   - {fileID: 11400000, guid: 3c1ea52a81433414db912c47b92bfafa, type: 2}
+  - {fileID: 11400000, guid: edfc8d99b7a77b349b93071f1ca43960, type: 2}

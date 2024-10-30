@@ -77,6 +77,7 @@ public class LevelChanger : MonoBehaviour
     public LevelData GetNextLevel(LevelData currentLevel)
     {
         var currentLvlIndex = Array.IndexOf(levels, currentLevel);
+        Debug.Log(currentLvlIndex);
         if (currentLvlIndex == -1) // level does not exist in list
         {
             return null;
@@ -104,15 +105,12 @@ public class LevelChanger : MonoBehaviour
     }
     public void HandleLevelLoad()
     {
-        if (SaveManager.Instance.runtimeData.currentLevel != null)
+        if (SaveManager.Instance.runtimeData.currentLevel == null)
         {
-            levelData = SaveManager.Instance.runtimeData.currentLevel;
-        }
-        else
-        {
-            levelData = debugLevelData;
+            SaveManager.Instance.runtimeData.currentLevel = debugLevelData;
             Debug.LogWarning("Save levelData is null, loading debug level data instead.");
         }
+        levelData = SaveManager.Instance.runtimeData.currentLevel;
         OnGameplayLevelLoaded?.Invoke(levelData);
         FadeIn();
     }
