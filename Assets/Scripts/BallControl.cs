@@ -1,4 +1,6 @@
+using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 // https://www.youtube.com/watch?v=RpeRnlLgmv8
 public class BallControl : MonoBehaviour
@@ -10,14 +12,16 @@ public class BallControl : MonoBehaviour
     private LineRenderer lr;
     Vector2 dragStartPos;
     Vector2 referencePos;
-    private bool isShooting = false;
+    private bool hasShot = false;
     private bool isGone = false;
     private bool hasBeenVisible = false;
     private Vector3 defaultScale;
+    private SpriteRenderer spriteRenderer;
     private void Start()
     {
         referencePos = transform.position;
         defaultScale = transform.localScale;
+        spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         lr = GetComponent<LineRenderer>();
         rb.isKinematic = true;
@@ -52,7 +56,7 @@ public class BallControl : MonoBehaviour
         {
             hasBeenVisible = true;
         }
-        if (!isShooting)
+        if (!hasShot)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -63,7 +67,7 @@ public class BallControl : MonoBehaviour
             {
 
                 Vector2 dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 _velocity = (dragEndPos - dragStartPos) * power;
+                Vector2 _velocity = Vector2.ClampMagnitude((dragEndPos - dragStartPos) * power, 15f);
                 Vector2[] trajectory = Plot(rb, (Vector2)transform.position, _velocity, 50, 10);
                 lr.positionCount = trajectory.Length;
                 Vector3[] positions = new Vector3[trajectory.Length];
@@ -77,9 +81,10 @@ public class BallControl : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 rb.isKinematic = false;
-                isShooting = true;
+                hasShot = true;
                 Vector2 dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 _velocity = (dragEndPos - dragStartPos) * power;
+                Vector2 _velocity = Vector2.ClampMagnitude((dragEndPos - dragStartPos) * power, 15f);
+                Debug.Log(_velocity);
                 rb.velocity = _velocity;
                 lr.positionCount = 0;
                 rb.constraints = RigidbodyConstraints2D.None;
@@ -91,19 +96,25 @@ public class BallControl : MonoBehaviour
         {
             Debug.Log("gone!");
             isGone = true; // so we don't spam this all the time
-            OnBallLost?.Invoke();
+            StartCoroutine(DelayBallLoss());
         }
     }
 
+    IEnumerator DelayBallLoss()
+    {
+        yield return new WaitForSeconds(0.2f);
+        OnBallLost?.Invoke();
+    }
     private void ResetBall()
     {
+        spriteRenderer.DOFade(0f, 0f);
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.rotation = 0f;
         rb.isKinematic = true;
         transform.position = referencePos;
-        isShooting = false;
         isGone = false;
+        spriteRenderer.DOFade(1f, 0.2f).OnComplete(() => hasShot = false);
     }
     public Vector2[] Plot(Rigidbody2D rigidbody, Vector2 pos, Vector2 velocity, int steps, float stepDistance)
     {
