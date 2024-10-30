@@ -3,9 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-#if !UNITY_EDITOR && !UNITY_ANDROID
-using UnityEngine.InputSystem;
-#endif
 
 public class LevelChanger : MonoBehaviour
 {
@@ -19,42 +16,12 @@ public class LevelChanger : MonoBehaviour
     [SerializeField] private LevelData[] levels;
     public static LevelChanger Instance { get; private set; }
 
-    private Coroutine co_HideCursor;
-
-    void Update()
-    {
-#if !UNITY_EDITOR && !UNITY_ANDROID
-        if (Mouse.current.delta.x.ReadValue() == 0 && (Mouse.current.delta.y.ReadValue() == 0))
-        {
-            if (co_HideCursor == null)
-            {
-                co_HideCursor = StartCoroutine(HideCursor());
-            }
-        }
-        else
-        {
-            if (co_HideCursor != null)
-            {
-                StopCoroutine(co_HideCursor);
-                co_HideCursor = null;
-                Cursor.visible = true;
-            }
-        }
-#endif
-    }
-
     private Animator GetRandomAnimator()
     {
         Animator animator = animators[UnityEngine.Random.Range(0, animators.Count)];
         animator.gameObject.SetActive(true);
         return animator;
     }
-    private IEnumerator HideCursor()
-    {
-        yield return new WaitForSeconds(5);
-        Cursor.visible = false;
-    }
-
     public void Awake()
     {
         Instance = this;
@@ -91,13 +58,6 @@ public class LevelChanger : MonoBehaviour
             return null;
         }
     }
-    private void Start()
-    {
-#if !UNITY_EDITOR
-        Cursor.visible = false;
-#endif
-    }
-
 
     private void SetTrigger(Animator animator, string trigger)
     {
