@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -82,7 +83,7 @@ public class UIController : MonoBehaviour
 
     private void UpdateScore(int score)
     {
+        DOVirtual.Int(currentScore, score, 1f, v => scoreText.text = $"SCORE\n{v:000000000}");
         currentScore = score;
-        scoreText.text = $"Score: {score}";
     }
 }

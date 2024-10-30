@@ -84,7 +84,6 @@ public class BallControl : MonoBehaviour
                 hasShot = true;
                 Vector2 dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 _velocity = Vector2.ClampMagnitude((dragEndPos - dragStartPos) * power, 15f);
-                Debug.Log(_velocity);
                 rb.velocity = _velocity;
                 lr.positionCount = 0;
                 rb.constraints = RigidbodyConstraints2D.None;
@@ -94,7 +93,6 @@ public class BallControl : MonoBehaviour
 
         if (!isGone && hasBeenVisible && !transform.GetChild(0).GetComponent<SpriteRenderer>().isVisible)
         {
-            Debug.Log("gone!");
             isGone = true; // so we don't spam this all the time
             StartCoroutine(DelayBallLoss());
         }

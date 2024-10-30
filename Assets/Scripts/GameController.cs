@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,22 +24,40 @@ public class GameController : MonoBehaviour
     private int specialRounds = 0;
     private bool gameOver = false;
     private bool isBadEnd = false;
+    private int combo;
+    private int roundScore;
     private void OnEnable()
     {
         BallControl.OnShot += RemoveBall;
         BallControl.OnBallLost += HandleTurnEnd;
-        BasketMove.OnBallCaught += AddBall;
+        BasketMove.OnBallCaught += BasketBall;
         PegObject.OnPegPopped += AddScore;
         LevelChanger.OnGameplayLevelLoaded += SetupGame;
         GameOver += SetGameOver;
+    }
+
+    private void BasketBall()
+    {
+        AddBall(true);
     }
 
     private void SetGameOver(GameOverType type)
     {
         isBadEnd = type == GameOverType.OutOfBalls;
         gameOver = true;
+        StartCoroutine(DelayScoreSet());
     }
 
+    IEnumerator DelayScoreSet()
+    {
+        yield return null;
+        var currentLevel = SaveManager.Instance.runtimeData.currentLevel;
+        var levelSave = SaveManager.Instance.GetLevelSave(currentLevel.levelID);
+        if (score > levelSave.score)
+        {
+            levelSave.score = score;
+        }
+    }
     private void HandleTurnEnd()
     {
         if (!hasHitDuringRound) // random mercy chance
@@ -51,7 +70,7 @@ public class GameController : MonoBehaviour
             MercyTime?.Invoke(hasMercy);
         }
 
-        
+
         if (redsLeft == 0) // could also do with red?
         {
             AddScoreForBalls();
@@ -72,6 +91,8 @@ public class GameController : MonoBehaviour
                 if (specialRounds == 0) SpecialMode?.Invoke(false);
             }
             hasHitDuringRound = false;
+            combo = 0;
+            roundScore = 0;
             RandomizeBonus();
         }
     }
@@ -84,32 +105,51 @@ public class GameController : MonoBehaviour
     private void AddScore(PegType type)
     {
         hasHitDuringRound = true;
+        combo++;
         pegsLeft--;
+        var multiplier = combo / 5;
+        int currentHit = 0;
         switch (type)
         {
             case PegType.Normal:
-                score += 50;
+                currentHit += 25;
                 break;
             case PegType.Red:
                 redsLeft--;
-                score += 100;
+                currentHit += 75;
+                combo += 2;
                 break;
             case PegType.Bonus:
-                score += 200;
+                currentHit += 150;
+                combo += 3;
                 break;
             case PegType.Special:
                 // we only have one special: big mode
                 specialRounds += 3;
+                combo++;
                 SpecialMode?.Invoke(true);
-                score += 100;
+                currentHit += 50;
                 break;
+        }
+        currentHit = currentHit + currentHit * combo;
+        score += currentHit;
+        roundScore += currentHit;
+        if (roundScore > 15000)
+        {
+            roundScore = 0;
+            AddBall(); // free ball for good score
         }
         OnScoreUpdated?.Invoke(score);
     }
 
-    private void AddBall()
+    private void AddBall(bool isBasket = false)
     {
-        hasHitDuringRound = true; // basket
+        if (isBasket)
+        {
+            hasHitDuringRound = true; // basket
+            score += 10000;
+            OnScoreUpdated?.Invoke(score);
+        }
         balls++;
         OnBallsUpdated?.Invoke(balls);
     }
@@ -124,7 +164,7 @@ public class GameController : MonoBehaviour
     {
         BallControl.OnShot -= RemoveBall;
         BallControl.OnBallLost -= HandleTurnEnd;
-        BasketMove.OnBallCaught -= AddBall;
+        BasketMove.OnBallCaught -= BasketBall;
         PegObject.OnPegPopped -= AddScore;
         LevelChanger.OnGameplayLevelLoaded -= SetupGame;
         GameOver -= SetGameOver;
@@ -191,14 +231,9 @@ public class GameController : MonoBehaviour
         if (gameOver && Input.GetKeyDown(KeyCode.B))
         {
             var currentLevel = SaveManager.Instance.runtimeData.currentLevel;
-            var levelSave = SaveManager.Instance.GetLevelSave(currentLevel.levelID);
-            if (score > levelSave.score)
-            {
-                levelSave.score = score;
-            }
             if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(currentLevel);
             gameOver = false;
-            
+
             if (SaveManager.Instance.runtimeData.currentLevel != null)
             {
                 LevelChanger.Instance.FadeToLevel(SceneManager.GetActiveScene().name);
@@ -206,7 +241,7 @@ public class GameController : MonoBehaviour
             else
             {
                 LevelChanger.Instance.FadeToLevel("EndingScene");
-            }  
+            }
         }
     }
 }
