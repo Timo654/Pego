@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -7,7 +6,6 @@ public class GameController : MonoBehaviour
     [SerializeField] Transform pegs;
     [SerializeField] SpriteRenderer background;
     private int balls;
-    [SerializeField] private LevelData debugLevel;
     private int bonusCount = 1; // can always be only one
     public static event Action NewTurn;
     public static Action<bool> SpecialMode;
@@ -22,13 +20,14 @@ public class GameController : MonoBehaviour
     private int pegsLeft;
     private int redsLeft;
     private int specialRounds = 0;
-    
+
     private void OnEnable()
     {
         BallControl.OnShot += RemoveBall;
         BallControl.OnBallLost += HandleTurnEnd;
         BasketMove.OnBallCaught += AddBall;
         PegObject.OnPegPopped += AddScore;
+        LevelChanger.OnGameplayLevelLoaded += SetupGame;
     }
 
     private void HandleTurnEnd()
@@ -118,6 +117,7 @@ public class GameController : MonoBehaviour
         BallControl.OnBallLost -= HandleTurnEnd;
         BasketMove.OnBallCaught -= AddBall;
         PegObject.OnPegPopped -= AddScore;
+        LevelChanger.OnGameplayLevelLoaded -= SetupGame;
     }
 
     private void RandomizePeg(int pegCount, PegType pegType)
@@ -145,18 +145,15 @@ public class GameController : MonoBehaviour
         }
     }
 
-
+    private void Start()
+    {
+        LevelChanger.Instance.HandleLevelLoad();
+    }
     private void RandomizeBonus()
     {
         if (currentBonus != null)
             currentBonus.SetPegType(PegType.Normal);
         RandomizePeg(bonusCount, PegType.Bonus);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetupGame(debugLevel);
     }
 
     private void SetupGame(LevelData levelData)
@@ -175,5 +172,6 @@ public class GameController : MonoBehaviour
         RandomizePeg(redsLeft, PegType.Red);
         RandomizePeg(levelData.specialCount, PegType.Special);
         RandomizeBonus();
+        //LevelChanger.Instance.FadeIn();
     }
 }

@@ -1,0 +1,157 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+#if !UNITY_EDITOR && !UNITY_ANDROID
+using UnityEngine.InputSystem;
+#endif
+
+public class LevelChanger : MonoBehaviour
+{
+    public static event Action<LevelData> OnGameplayLevelLoaded;
+    public static event Action OnFadeInFinished;
+    public float transitionTime = 1f; // couldnt get animation events to work right now
+    public LevelData debugLevelData;
+    private bool loadInProgess = false;
+    private LevelData levelData;
+    private List<Animator> animators = new();
+    [SerializeField] private LevelData[] levels;
+    public static LevelChanger Instance { get; private set; }
+
+    private Coroutine co_HideCursor;
+
+    void Update()
+    {
+#if !UNITY_EDITOR && !UNITY_ANDROID
+        if (Mouse.current.delta.x.ReadValue() == 0 && (Mouse.current.delta.y.ReadValue() == 0))
+        {
+            if (co_HideCursor == null)
+            {
+                co_HideCursor = StartCoroutine(HideCursor());
+            }
+        }
+        else
+        {
+            if (co_HideCursor != null)
+            {
+                StopCoroutine(co_HideCursor);
+                co_HideCursor = null;
+                Cursor.visible = true;
+            }
+        }
+#endif
+    }
+
+    private Animator GetRandomAnimator()
+    {
+        Animator animator = animators[UnityEngine.Random.Range(0, animators.Count)];
+        animator.gameObject.SetActive(true);
+        return animator;
+    }
+    private IEnumerator HideCursor()
+    {
+        yield return new WaitForSeconds(5);
+        Cursor.visible = false;
+    }
+
+    public void Awake()
+    {
+        Instance = this;
+        Animator childAnimator;
+        // find all transitions
+        foreach (Transform child in transform)
+        {
+            if (child.TryGetComponent(out childAnimator))
+            {
+                animators.Add(childAnimator);
+            }
+        }
+    }
+
+    public LevelData[] GetLevels()
+    {
+        return levels;
+    }
+
+    public LevelData GetNextLevel(LevelData currentLevel)
+    {
+        var currentLvlIndex = Array.IndexOf(levels, currentLevel);
+        if (currentLvlIndex == -1) // level does not exist in list
+        {
+            return null;
+        }
+        else if (currentLvlIndex + 1 < levels.Length)
+        {
+            return levels[currentLvlIndex + 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private void Start()
+    {
+#if !UNITY_EDITOR
+        Cursor.visible = false;
+#endif
+    }
+
+
+    private void SetTrigger(Animator animator, string trigger)
+    {
+        animator.SetTrigger(trigger);
+    }
+    public void HandleLevelLoad()
+    {
+        if (SaveManager.Instance.runtimeData.currentLevel != null)
+        {
+            levelData = SaveManager.Instance.runtimeData.currentLevel;
+        }
+        else
+        {
+            levelData = debugLevelData;
+            Debug.LogWarning("Save levelData is null, loading debug level data instead.");
+        }
+        OnGameplayLevelLoaded?.Invoke(levelData);
+        FadeIn();
+    }
+    public void FadeIn()
+    {
+        StartCoroutine(FadeInCoroutine());
+    }
+    public void FadeToLevel(string levelName)
+    {
+        if (!loadInProgess) StartCoroutine(LoadLevel(levelName));
+        else Debug.LogWarning($"Already loading a level, cannot load {levelName}!");
+    }
+    public void FadeToDesktop()
+    {
+        if (!loadInProgess) StartCoroutine(QuitToDesktop());
+        else Debug.LogWarning($"Already loading a level!");
+    }
+    IEnumerator LoadLevel(string levelToLoad)
+    {
+        if (SaveManager.Instance != null) SaveManager.Instance.runtimeData.previousSceneName = SceneManager.GetActiveScene().name;
+        loadInProgess = true;
+        SetTrigger(GetRandomAnimator(), "FadeOut");
+        yield return new WaitForSecondsRealtime(transitionTime);
+        SceneManager.LoadSceneAsync(levelToLoad);
+        loadInProgess = false;
+    }
+    IEnumerator QuitToDesktop()
+    {
+        Debug.Log("Quitting.");
+        loadInProgess = true;
+        SetTrigger(GetRandomAnimator(), "FadeOut");
+        yield return new WaitForSecondsRealtime(transitionTime);
+        loadInProgess = false;
+        Application.Quit();
+    }
+    IEnumerator FadeInCoroutine()
+    {
+        SetTrigger(GetRandomAnimator(), "FadeIn");
+        yield return new WaitForSecondsRealtime(transitionTime);
+        OnFadeInFinished?.Invoke();
+    }
+}
