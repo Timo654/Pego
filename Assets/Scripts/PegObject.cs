@@ -23,7 +23,6 @@ public class PegObject : MonoBehaviour
         if (popped) return;
         OnPegPopped?.Invoke(pegType);
         popped = true;
-        Debug.Log("popped peg");
         spriteRenderer.DOFade(0f, 0.5f).OnComplete(() => gameObject.SetActive(false));
     }
 

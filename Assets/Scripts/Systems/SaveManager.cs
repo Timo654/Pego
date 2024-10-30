@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,6 +55,19 @@ public class SaveManager : MonoSingleton<SaveManager>
         if (Instance.gameData != null) { SaveData(Instance.gameData, "data.json"); }
     }
 
+    public LevelSave GetLevelSave(uint levelID)
+    {
+        LevelSave saveData;
+        if (gameData.levelSave.ContainsKey(levelID))
+        {
+            saveData = gameData.levelSave[levelID];
+        }
+        else
+        {
+            gameData.levelSave[levelID] = saveData = new LevelSave { score = 0 };
+        }
+        return saveData;
+    }
     public static bool DoesBackupExist()
     {
         if (File.Exists(GetSaveFilePath("backup_data.json")))
@@ -103,7 +117,9 @@ public class SystemData
 [Serializable]
 public class GameData
 {
-    public int version = 2;
+    public int version = 1;
+    public uint lastPlayedLevel = 1;
+    public Dictionary<uint, LevelSave> levelSave = new();
 }
 
 [Serializable]
@@ -113,4 +129,8 @@ public class RuntimeData
     public LevelData currentLevel;
 }
 
-
+[Serializable]
+public class LevelSave
+{
+    public int score;
+}

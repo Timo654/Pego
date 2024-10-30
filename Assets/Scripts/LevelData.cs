@@ -4,6 +4,7 @@ using UnityEngine;
 [Serializable]
 public class LevelData : ScriptableObject
 {
+    public uint levelID;
     public Sprite backgroundImage;
     public GameObject levelObjects;
     public int ballCount;

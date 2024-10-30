@@ -51,16 +51,17 @@ public class GameController : MonoBehaviour
             MercyTime?.Invoke(hasMercy);
         }
 
-        if (balls == 0)
-        {
-            Debug.Log($"GAME OVER!!! Score: {score}, red {redsLeft}, all {pegsLeft}");
-            GameOver?.Invoke(GameOverType.OutOfBalls);
-        }
-        else if (redsLeft == 0) // could also do with red?
+        
+        if (redsLeft == 0) // could also do with red?
         {
             AddScoreForBalls();
             if (pegsLeft == 0) GameOver?.Invoke(GameOverType.GotAll);
             else GameOver?.Invoke(GameOverType.GotAllRed);
+        }
+        else if (balls == 0)
+        {
+            Debug.Log($"GAME OVER!!! Score: {score}, red {redsLeft}, all {pegsLeft}");
+            GameOver?.Invoke(GameOverType.OutOfBalls);
         }
         else
         {
@@ -189,8 +190,15 @@ public class GameController : MonoBehaviour
     {
         if (gameOver && Input.GetKeyDown(KeyCode.B))
         {
-            if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(SaveManager.Instance.runtimeData.currentLevel);
+            var currentLevel = SaveManager.Instance.runtimeData.currentLevel;
+            var levelSave = SaveManager.Instance.GetLevelSave(currentLevel.levelID);
+            if (score > levelSave.score)
+            {
+                levelSave.score = score;
+            }
+            if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(currentLevel);
             gameOver = false;
+            
             if (SaveManager.Instance.runtimeData.currentLevel != null)
             {
                 LevelChanger.Instance.FadeToLevel(SceneManager.GetActiveScene().name);

@@ -9,6 +9,7 @@ public class UIController : MonoBehaviour
     [SerializeField] TextMeshProUGUI infoText;
     private float textEndTime;
     private bool isShowingText;
+    private int currentScore = 0;
     private void Awake()
     {
         infoText.gameObject.SetActive(false);
@@ -29,21 +30,29 @@ public class UIController : MonoBehaviour
 
     private void HandleGameOver(GameOverType type)
     {
-        string msg = "Game over...";
+        string msg = "";
+        var levelData = SaveManager.Instance.GetLevelSave(SaveManager.Instance.runtimeData.currentLevel.levelID);
+        if (currentScore > levelData.score && levelData.score > 0)
+        {
+            msg += $"New high score! Previous: {levelData.score}\n";
+        }
+        else if (levelData.score > 0)
+        {
+            msg += $"Current high score is still {levelData.score}...\n";
+        }
         switch (type)
         {
             case GameOverType.OutOfBalls:
-                msg = "Game over...\nRan out of balls.\nPress B to retry...";
+                msg += "Game over...\nRan out of balls.\nPress B to retry...";
                 break;
             case GameOverType.GotAllRed:
-                msg = "Congratulations!\nGot all reds!\nPress B to continue.";
+                msg += "Congratulations!\nGot all reds!\nPress B to continue.";
                 break;
             case GameOverType.GotAll:
-                msg = "Amazing!\nLevel cleared!\nPress B to continue.";
+                msg += "Amazing!\nLevel cleared!\nPress B to continue.";
                 break;
         }
         StartCoroutine(ShowInfoText(msg, 10f));
-        // TODO - let the user continue somehow
     }
 
     private void HandleMercy(bool hasMercy)
@@ -73,6 +82,7 @@ public class UIController : MonoBehaviour
 
     private void UpdateScore(int score)
     {
+        currentScore = score;
         scoreText.text = $"Score: {score}";
     }
 }

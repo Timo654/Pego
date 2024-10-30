@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -67,10 +69,18 @@ public class LevelChanger : MonoBehaviour
     {
         if (SaveManager.Instance.runtimeData.currentLevel == null)
         {
-            SaveManager.Instance.runtimeData.currentLevel = debugLevelData;
-            Debug.LogWarning("Save levelData is null, loading debug level data instead.");
-        }
+            if (Application.isEditor)
+            {
+                SaveManager.Instance.runtimeData.currentLevel = debugLevelData;
+                Debug.LogWarning("Save levelData is null, loading debug level data instead.");
+            }
+            else
+            {
+                SaveManager.Instance.runtimeData.currentLevel = levels.FirstOrDefault(item => item.levelID == SaveManager.Instance.gameData.lastPlayedLevel);
+            } 
+        } 
         levelData = SaveManager.Instance.runtimeData.currentLevel;
+        SaveManager.Instance.gameData.lastPlayedLevel = levelData.levelID;
         OnGameplayLevelLoaded?.Invoke(levelData);
         FadeIn();
     }
