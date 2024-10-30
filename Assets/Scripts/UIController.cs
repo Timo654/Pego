@@ -7,6 +7,8 @@ public class UIController : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI ballText;
     [SerializeField] TextMeshProUGUI infoText;
+    private float textEndTime;
+    private bool isShowingText;
     private void Awake()
     {
         infoText.gameObject.SetActive(false);
@@ -42,13 +44,17 @@ public class UIController : MonoBehaviour
         }
     }
 
-    // FIXME - will break if two messages get called at once
     IEnumerator ShowInfoText(string text, float duration)
     {
         infoText.text = text;
+        textEndTime = Time.time + duration;
+        if (isShowingText) yield break;
+        isShowingText = true;
         infoText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(duration);
+        while (textEndTime > Time.time)
+            yield return null;
         infoText.gameObject.SetActive(false);
+        isShowingText = false;
     }
 
     private void UpdateScore(int score)
