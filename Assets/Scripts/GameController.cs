@@ -209,6 +209,7 @@ public class GameController : MonoBehaviour
     private void SetupGame(LevelData levelData)
     {
         background.sprite = levelData.backgroundImage;
+        background.color = levelData.backgroundTint;
         balls = levelData.ballCount;
         if (pegs != null)
         {

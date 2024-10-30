@@ -15,6 +15,6 @@ MonoBehaviour:
   levelID: 6
   backgroundImage: {fileID: 21300000, guid: efa77a18c01c6184ab4f68f662052cf3, type: 3}
   backgroundTint: {r: 1, g: 1, b: 1, a: 1}
-  levelObjects: {fileID: 2958880752325052744, guid: b6ada761f9a535f41bb022cf79f5a9a4, type: 3}
+  levelObjects: {fileID: 3517767046918217853, guid: 4d281dbf57226ae488820c79d1f33441, type: 3}
   ballCount: 12
   specialCount: 4
