@@ -147,7 +147,7 @@ public class GameController : MonoBehaviour
         if (isBasket)
         {
             hasHitDuringRound = true; // basket
-            score += 10000;
+            if (combo > 4) score += 10000;
             OnScoreUpdated?.Invoke(score);
         }
         balls++;
