@@ -31,6 +31,12 @@ public class BallControl : MonoBehaviour
     {
         GameController.NewTurn += ResetBall;
         GameController.SpecialMode += TurnBig;
+        BasketMove.OnBallCaught += TurnInvisible;
+    }
+
+    private void TurnInvisible()
+    {
+        spriteRenderer.DOFade(0f, 0.1f);
     }
 
     private void TurnBig(bool enabled)
@@ -49,6 +55,7 @@ public class BallControl : MonoBehaviour
     {
         GameController.NewTurn -= ResetBall;
         GameController.SpecialMode -= TurnBig;
+        BasketMove.OnBallCaught -= TurnInvisible;
     }
     private void Update()
     {
