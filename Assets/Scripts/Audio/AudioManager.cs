@@ -79,17 +79,20 @@ public class AudioManager : MonoSingleton<AudioManager>
         {
             MusicVolume += 0.05f;
             MusicVolume = Math.Clamp(MusicVolume, 0f, 1f);
+            SaveManager.Instance.systemData.MusicVolume = MusicVolume * 100f;
         }
 
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
             MusicVolume -= 0.05f;
             MusicVolume = Math.Clamp(MusicVolume, 0f, 1f);
+            SaveManager.Instance.systemData.MusicVolume = MusicVolume * 100f;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
             MusicVolume = UnityEngine.Random.Range(0, 1f);
+            SaveManager.Instance.systemData.MusicVolume = MusicVolume * 100f;
         }
     }
 
