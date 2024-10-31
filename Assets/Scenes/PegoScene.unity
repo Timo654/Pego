@@ -7099,6 +7099,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pegs
       objectReference: {fileID: 0}
+    - target: {fileID: 9129588745394443393, guid: c254e82c37646284383765f1b3201775, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
