@@ -173,10 +173,6 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2773716166014004049, guid: 8e463614046f4e14b93f0b7f5a3cd063, type: 3}
-      propertyPath: debugLevelData
-      value: 
-      objectReference: {fileID: 11400000, guid: bc6c8801d78f50a4ba16f1022144fa89, type: 2}
     - target: {fileID: 2816013268805446386, guid: 8e463614046f4e14b93f0b7f5a3cd063, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

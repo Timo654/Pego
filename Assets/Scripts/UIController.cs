@@ -19,7 +19,7 @@ public class UIController : MonoBehaviour
     {
         if (!SaveManager.Instance.runtimeData.seenTutorial)
         {
-            StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nPress + and - to change music volume, or R to randomize it.\nGood luck.", 11037f));
+            StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nMash + and - to change the music volume, or R to randomize it.\nGood luck.", 11037f));
         }
 
     }
