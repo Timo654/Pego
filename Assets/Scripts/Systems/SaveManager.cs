@@ -127,6 +127,7 @@ public class RuntimeData
 {
     public string previousSceneName;
     public LevelData currentLevel;
+    public bool seenTutorial = false;
 }
 
 [Serializable]

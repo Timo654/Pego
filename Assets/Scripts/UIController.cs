@@ -15,11 +15,20 @@ public class UIController : MonoBehaviour
     {
         infoText.gameObject.SetActive(false);
     }
+    private void Start()
+    {
+        if (!SaveManager.Instance.runtimeData.seenTutorial)
+        {
+            StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nGood luck.", 11037f));
+        }
+
+    }
     private void OnEnable()
     {
         GameController.OnScoreUpdated += UpdateScore;
         GameController.MercyTime += HandleMercy;
         GameController.GameOver += HandleGameOver;
+        BallControl.OnShot += DisableTutorial;
     }
 
     private void OnDisable()
@@ -27,6 +36,17 @@ public class UIController : MonoBehaviour
         GameController.OnScoreUpdated -= UpdateScore;
         GameController.MercyTime -= HandleMercy;
         GameController.GameOver -= HandleGameOver;
+        BallControl.OnShot -= DisableTutorial;
+    }
+
+    private void DisableTutorial()
+    {
+        if (!SaveManager.Instance.runtimeData.seenTutorial)
+        {
+            SaveManager.Instance.runtimeData.seenTutorial = true;
+            StartCoroutine(ShowInfoText("", 0f));
+        }
+        BallControl.OnShot -= DisableTutorial;
     }
 
     private void HandleGameOver(GameOverType type)
