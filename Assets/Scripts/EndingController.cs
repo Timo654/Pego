@@ -6,6 +6,7 @@ public class EndingController : MonoBehaviour
 
     private void Awake()
     {
+        SaveManager.Instance.gameData.lastPlayedLevel = 1; // reset to start of the game
         AudioManager.Instance.InitializeMusic(FMODEvents.Instance.CreditsTheme);
         AudioManager.Instance.StartMusic();
     }
