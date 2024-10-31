@@ -9,8 +9,10 @@ public class BasketMove : MonoBehaviour
     private Vector2 leftTarget;
     private Vector2 rightTarget;
     private bool goingLeft;
+    private ParticleSystem ps;
     void Start()
     {
+        ps = GetComponent<ParticleSystem>();    
         var hitLeft = Physics2D.Raycast(transform.position, Vector2.left);
         var hitRight = Physics2D.Raycast(transform.position, Vector2.right);
         leftTarget = new Vector2(hitLeft.point.x + 0.3f, transform.position.y);
@@ -40,6 +42,7 @@ public class BasketMove : MonoBehaviour
         Debug.Log(collision.name + " has entered");
         if (collision.name.ToLower() == "ball")
         {
+            ps.Play();
             OnBallCaught?.Invoke();
         }
     }
