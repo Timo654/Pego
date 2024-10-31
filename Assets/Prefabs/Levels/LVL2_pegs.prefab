@@ -666,6 +666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PegSquare (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.2692385
@@ -1286,6 +1290,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PegSquare (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.9636226
@@ -1658,6 +1666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PegSquare (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.349082
@@ -1781,6 +1793,10 @@ PrefabInstance:
     - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_Name
       value: PegSquare
+      objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2216,6 +2232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PegSquare (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.4843972
@@ -2401,6 +2421,10 @@ PrefabInstance:
     - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_Name
       value: PegSquare (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3703,6 +3727,10 @@ PrefabInstance:
     - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_Name
       value: PegSquare (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2662754062109628017, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3228337781703373902, guid: 5b05fd9c3e75e1f4bb9fa79aac828f53, type: 3}
       propertyPath: m_LocalPosition.x
