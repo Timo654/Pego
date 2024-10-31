@@ -10,9 +10,14 @@ public class BasketMove : MonoBehaviour
     private Vector2 rightTarget;
     private bool goingLeft;
     private ParticleSystem ps;
+    private SpriteRenderer sr;
+    private void Awake()
+    {
+        ps = GetComponent<ParticleSystem>();
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
+    }
     void Start()
     {
-        ps = GetComponent<ParticleSystem>();    
         var hitLeft = Physics2D.Raycast(transform.position, Vector2.left);
         var hitRight = Physics2D.Raycast(transform.position, Vector2.right);
         leftTarget = new Vector2(hitLeft.point.x + 0.3f, transform.position.y);
@@ -20,6 +25,21 @@ public class BasketMove : MonoBehaviour
         var colliders = GetComponents<BoxCollider2D>();
         foreach (var collider in colliders)
             collider.enabled = true;
+    }
+
+    private void OnEnable()
+    {
+        LevelChanger.OnGameplayLevelLoaded += TintBasket;
+    }
+
+    private void OnDisable()
+    {
+        LevelChanger.OnGameplayLevelLoaded -= TintBasket;
+    }
+
+    private void TintBasket(LevelData data)
+    {
+        sr.color = data.basketTint;
     }
 
     // Update is called once per frame

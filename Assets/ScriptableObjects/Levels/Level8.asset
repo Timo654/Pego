@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9fa4d93b9f6dab4182c4d8fc5faaa3d, type: 3}
-  m_Name: Level6
+  m_Name: Level8
   m_EditorClassIdentifier: 
-  levelID: 6
-  backgroundImage: {fileID: 21300000, guid: efa77a18c01c6184ab4f68f662052cf3, type: 3}
-  backgroundTint: {r: 1, g: 1, b: 1, a: 1}
-  basketTint: {r: 1, g: 0.6901961, b: 0.64705884, a: 1}
-  levelObjects: {fileID: 3517767046918217853, guid: 4d281dbf57226ae488820c79d1f33441, type: 3}
+  levelID: 8
+  backgroundImage: {fileID: 21300000, guid: 07e756bd2cdf80a4194281febc9d49af, type: 3}
+  backgroundTint: {r: 0.94509804, g: 0.8117647, b: 0.20784314, a: 1}
+  basketTint: {r: 1, g: 0.8980392, b: 0.42745098, a: 1}
+  levelObjects: {fileID: 8734848288582734365, guid: 5fc331867ec3f304f800b9a31df4ae26, type: 3}
   ballCount: 12
   specialCount: 4
