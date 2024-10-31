@@ -16,6 +16,13 @@ MonoBehaviour:
   backgroundImage: {fileID: 21300000, guid: 8ee6861adae844d449f5ce169eddb272, type: 3}
   backgroundTint: {r: 0.8666667, g: 0.8235294, b: 1, a: 1}
   basketTint: {r: 0.6117647, g: 0.70980394, b: 1, a: 1}
+  levelTheme:
+    Guid:
+      Data1: -1573542829
+      Data2: 1244743735
+      Data3: 191560852
+      Data4: -351333335
+    Path: event:/Song10
   levelObjects: {fileID: 8499131779219313938, guid: 2433e8e58a7b89a40a6b00abf46b72e1, type: 3}
   ballCount: 12
   specialCount: 4

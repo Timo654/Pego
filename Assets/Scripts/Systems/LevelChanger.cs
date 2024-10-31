@@ -102,6 +102,11 @@ public class LevelChanger : MonoBehaviour
     {
         if (SaveManager.Instance != null) SaveManager.Instance.runtimeData.previousSceneName = SceneManager.GetActiveScene().name;
         loadInProgess = true;
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.FadeOutMusic();
+            AudioManager.Instance.StopSFX();
+        }
         SetTrigger(GetRandomAnimator(), "FadeOut");
         yield return new WaitForSecondsRealtime(transitionTime);
         SceneManager.LoadSceneAsync(levelToLoad);
@@ -111,6 +116,11 @@ public class LevelChanger : MonoBehaviour
     {
         Debug.Log("Quitting.");
         loadInProgess = true;
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.FadeOutMusic();
+            AudioManager.Instance.StopSFX();
+        }
         SetTrigger(GetRandomAnimator(), "FadeOut");
         yield return new WaitForSecondsRealtime(transitionTime);
         loadInProgess = false;

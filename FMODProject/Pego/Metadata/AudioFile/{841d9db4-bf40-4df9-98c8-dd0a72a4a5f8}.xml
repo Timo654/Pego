@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{841d9db4-bf40-4df9-98c8-dd0a72a4a5f8}">
+		<property name="assetPath">
+			<value>winter_tears.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>248.24163265306123</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e86e930b-82db-4c85-b98f-1aa8dbbbf25f}</destination>
+		</relationship>
+	</object>
+</objects>

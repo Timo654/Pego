@@ -111,7 +111,7 @@ public class SystemData
     public float MasterVolume = 100f;
     public float SFXVolume = 50f;
     public float UIVolume = 40f;
-    public float MusicVolume = 20f;
+    public float MusicVolume = 40f;
 }
 
 [Serializable]

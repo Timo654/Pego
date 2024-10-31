@@ -19,7 +19,7 @@ public class UIController : MonoBehaviour
     {
         if (!SaveManager.Instance.runtimeData.seenTutorial)
         {
-            StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nGood luck.", 11037f));
+            StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nPress + and - to change music volume, or R to randomize it.\nGood luck.", 11037f));
         }
 
     }
@@ -64,16 +64,16 @@ public class UIController : MonoBehaviour
         switch (type)
         {
             case GameOverType.OutOfBalls:
-                msg += "Game over...\nRan out of balls.\nPress B to retry...";
+                msg += "Game over...\nRan out of balls.\nPress SPACE to retry...";
                 break;
             case GameOverType.GotAllRed:
-                msg += "Congratulations!\nGot all reds!\nPress B to continue.";
+                msg += "Congratulations!\nGot all reds!\nPress SPACE to continue.";
                 break;
             case GameOverType.GotAll:
-                msg += "Amazing!\nLevel cleared!\nPress B to continue.";
+                msg += "Amazing!\nLevel cleared!\nPress SPACE to continue.";
                 break;
         }
-        StartCoroutine(ShowInfoText(msg, 10f));
+        StartCoroutine(ShowInfoText(msg, 600f));
     }
 
     private void HandleMercy(bool hasMercy)

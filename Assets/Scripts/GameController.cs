@@ -223,13 +223,15 @@ public class GameController : MonoBehaviour
         RandomizePeg(redsLeft, PegType.Red);
         RandomizePeg(levelData.specialCount, PegType.Special);
         RandomizeBonus();
+        AudioManager.Instance.InitializeMusic(levelData.levelTheme);
+        AudioManager.Instance.StartMusic();
     }
 
 
     // TODO - use new input system maybe to avoid this mess !!!
     private void Update()
     {
-        if (gameOver && Input.GetKeyDown(KeyCode.B))
+        if (gameOver && Input.GetKeyDown(KeyCode.Space))
         {
             var currentLevel = SaveManager.Instance.runtimeData.currentLevel;
             if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(currentLevel);
