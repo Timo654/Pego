@@ -64,11 +64,3 @@ public class PegObject : MonoBehaviour
         }
     }
 }
-
-public enum PegType
-{
-    Normal,
-    Red,
-    Bonus,
-    Special
-}

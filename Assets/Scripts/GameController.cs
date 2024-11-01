@@ -251,10 +251,3 @@ public class GameController : MonoBehaviour
         }
     }
 }
-
-public enum GameOverType
-{
-    OutOfBalls,
-    GotAllRed,
-    GotAll
-}

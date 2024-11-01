@@ -16,7 +16,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     private void Awake()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        mPersistentDataPath = "idbfs/Pego"; 
+        mPersistentDataPath = $"idbfs/{BuildConstants.gameName}"; 
 #else
         mPersistentDataPath = Application.persistentDataPath;
 #endif
@@ -67,14 +67,6 @@ public class SaveManager : MonoSingleton<SaveManager>
             gameData.levelSave[levelID] = saveData = new LevelSave { score = 0 };
         }
         return saveData;
-    }
-    public static bool DoesBackupExist()
-    {
-        if (File.Exists(GetSaveFilePath("backup_data.json")))
-        {
-            return true;
-        }
-        return false;
     }
 
     private static void SaveData<T>(T saveData, string fileName)

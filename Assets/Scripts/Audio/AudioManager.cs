@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoSingleton<AudioManager>
 {
@@ -29,6 +30,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     private Bus uiBus;
     const string sid = "00000000-0000-0000-0000-000000000000";
     static readonly Guid nullGuid = new Guid(sid);
+    private bool stopCalled;
 
     private List<EventInstance> eventInstances = new();
     class TimelineInfo
@@ -58,6 +60,21 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     private void Awake()
     {
+        if (SceneManager.GetActiveScene().name == "BankLoader")
+        {
+            Debug.Log("funny bankloader!");
+            LoadBankAndScene.OnBanksLoaded += InitAudio;
+        }
+        else
+        {
+            InitializeInstance(this);
+        }
+    }
+
+    private void InitAudio()
+    {
+        Debug.Log("music init");
+        LoadBankAndScene.OnBanksLoaded -= InitAudio;
         InitializeInstance(this);
     }
 
@@ -159,13 +176,12 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         musicEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         musicEventInstance.release();
-
     }
 
     public static bool IsPlaying()
     {
         musicEventInstance.getPlaybackState(out PLAYBACK_STATE state);
-        return state != PLAYBACK_STATE.STOPPED;
+        return state != PLAYBACK_STATE.STOPPED && state != PLAYBACK_STATE.STOPPING;
     }
 
     public static bool IsPlaying(EventInstance instance)
