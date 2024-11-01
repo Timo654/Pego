@@ -12,7 +12,6 @@ public class BootAnim : MonoBehaviour
     private Image imageRenderer;
     private float startTime;
     private LogoState logoState = LogoState.Start;
-    private bool mobileTouch = false;
     // Start is called before the first frame update
     void Start()
     {
