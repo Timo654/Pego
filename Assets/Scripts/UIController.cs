@@ -21,7 +21,6 @@ public class UIController : MonoBehaviour
         {
             StartCoroutine(ShowInfoText("Hold left click and drag your mouse to shoot the ball.\nClear all the red pegs to proceed.\n\nMash + and - to change the music volume, or R to randomize it.\nGood luck.", 11037f));
         }
-
     }
     private void OnEnable()
     {
@@ -29,6 +28,29 @@ public class UIController : MonoBehaviour
         GameController.MercyTime += HandleMercy;
         GameController.GameOver += HandleGameOver;
         BallControl.OnShot += DisableTutorial;
+    }
+
+    void OnRectTransformDimensionsChange()
+    {
+        // Tries to fit the gameplay onto the screen.
+        float ratio = (float)Screen.width / Screen.height;
+        // awful chatgptd code but i just dont care enough rn
+        var camSize = 0f;
+        if (ratio >= 1.777778f)
+            camSize = 5f;
+        else if (ratio == 1.6f)
+            camSize = 5.8f;
+        else if (ratio == 1.25f)
+            camSize = 9.2f;
+        else if (ratio == 1)
+            camSize = 16f;
+        else if (ratio > 1.6 && ratio < 1.777778f)
+            camSize = 5.8f + (5f - 5.8f) * (ratio - 1.6f) / (1.777778f - 1.6f);
+        else if (ratio > 1.25 && ratio < 1.6f)
+            camSize = 9.2f + (5.8f - 9.2f) * (ratio - 1.25f) / (1.6f - 1.25f);
+        else if (ratio > 1f && ratio < 1.25f)
+            camSize = 16f + (9.2f - 16f) * (ratio - 1f) / (1.25f - 1f);
+        Camera.main.orthographicSize = camSize;
     }
 
     private void OnDisable()
