@@ -29,7 +29,7 @@ public class PegObject : MonoBehaviour
         particles.Play();
         OnPegPopped?.Invoke(pegType);
         popped = true;
-        spriteRenderer.DOFade(0f, 0.5f).OnComplete(() => gameObject.SetActive(false));
+        spriteRenderer.DOFade(0f, 0.5f).OnComplete(() => Destroy(gameObject));
     }
 
     public PegType GetPegType()

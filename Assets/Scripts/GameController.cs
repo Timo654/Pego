@@ -223,8 +223,11 @@ public class GameController : MonoBehaviour
         RandomizePeg(redsLeft, PegType.Red);
         RandomizePeg(levelData.specialCount, PegType.Special);
         RandomizeBonus();
-        AudioManager.Instance.InitializeMusic(levelData.levelTheme);
-        AudioManager.Instance.StartMusic();
+        if (!AudioManager.IsPlaying())
+        {
+            AudioManager.Instance.InitializeMusic(levelData.levelTheme);
+            AudioManager.Instance.StartMusic();
+        }
     }
 
 
@@ -239,7 +242,7 @@ public class GameController : MonoBehaviour
 
             if (SaveManager.Instance.runtimeData.currentLevel != null)
             {
-                LevelChanger.Instance.FadeToLevel(SceneManager.GetActiveScene().name);
+                LevelChanger.Instance.FadeToLevel(SceneManager.GetActiveScene().name, !isBadEnd);
             }
             else
             {

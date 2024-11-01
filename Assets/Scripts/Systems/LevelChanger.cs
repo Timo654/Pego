@@ -46,7 +46,6 @@ public class LevelChanger : MonoBehaviour
     public LevelData GetNextLevel(LevelData currentLevel)
     {
         var currentLvlIndex = Array.IndexOf(levels, currentLevel);
-        Debug.Log(currentLvlIndex);
         if (currentLvlIndex == -1) // level does not exist in list
         {
             return null;
@@ -88,9 +87,9 @@ public class LevelChanger : MonoBehaviour
     {
         StartCoroutine(FadeInCoroutine());
     }
-    public void FadeToLevel(string levelName)
+    public void FadeToLevel(string levelName, bool endMusic = true)
     {
-        if (!loadInProgess) StartCoroutine(LoadLevel(levelName));
+        if (!loadInProgess) StartCoroutine(LoadLevel(levelName, endMusic));
         else Debug.LogWarning($"Already loading a level, cannot load {levelName}!");
     }
     public void FadeToDesktop()
@@ -98,13 +97,13 @@ public class LevelChanger : MonoBehaviour
         if (!loadInProgess) StartCoroutine(QuitToDesktop());
         else Debug.LogWarning($"Already loading a level!");
     }
-    IEnumerator LoadLevel(string levelToLoad)
+    IEnumerator LoadLevel(string levelToLoad, bool endMusic)
     {
         if (SaveManager.Instance != null) SaveManager.Instance.runtimeData.previousSceneName = SceneManager.GetActiveScene().name;
         loadInProgess = true;
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.FadeOutMusic();
+            if (endMusic) AudioManager.Instance.FadeOutMusic();
             AudioManager.Instance.StopSFX();
         }
         SetTrigger(GetRandomAnimator(), "FadeOut");
