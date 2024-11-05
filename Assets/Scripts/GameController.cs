@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] Transform pegs;
     [SerializeField] SpriteRenderer background;
+    [SerializeField] Button continueButton;
     private int balls;
     private int bonusCount = 1; // can always be only one
     public static event Action NewTurn;
@@ -26,6 +29,12 @@ public class GameController : MonoBehaviour
     private bool isBadEnd = false;
     private int combo;
     private int roundScore;
+    private bool continuePressed = false;
+
+    private void Awake()
+    {
+        continueButton.gameObject.SetActive(false);
+    }
     private void OnEnable()
     {
         BallControl.OnShot += RemoveBall;
@@ -44,6 +53,12 @@ public class GameController : MonoBehaviour
     private void SetGameOver(GameOverType type)
     {
         isBadEnd = type == GameOverType.OutOfBalls;
+        if (isBadEnd)
+        {
+            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Retry";
+        }
+        continueButton.onClick.AddListener(delegate { PressContinue(); });
+        continueButton.gameObject.SetActive(true);
         gameOver = true;
         StartCoroutine(DelayScoreSet());
     }
@@ -230,12 +245,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void PressContinue()
+    {
+        continuePressed = true;
+    }
 
     // TODO - use new input system maybe to avoid this mess !!!
     private void Update()
     {
-        if (gameOver && Input.GetKeyDown(KeyCode.Space))
+        if (gameOver && (Input.GetKeyDown(KeyCode.Space) || continuePressed))
         {
+            continuePressed = false;
             var currentLevel = SaveManager.Instance.runtimeData.currentLevel;
             if (!isBadEnd) SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetNextLevel(currentLevel);
             gameOver = false;

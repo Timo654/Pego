@@ -31,10 +31,18 @@ public class SaveManager : MonoSingleton<SaveManager>
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        LevelChanger.OnGameplayLevelLoaded += Autosave;
     }
+
+    private void Autosave(LevelData data)
+    {
+        SaveAll();
+    }
+
     private void OnDisable()
     {
         SaveAll();
+        LevelChanger.OnGameplayLevelLoaded -= Autosave;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 

@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EndingController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private TextMeshProUGUI endText;
-
+    [SerializeField] private Button continueButton;
+    private bool continuePressed;
     private void Awake()
     {
         SaveManager.Instance.gameData.lastPlayedLevel = 1; // reset to start of the game
@@ -14,8 +16,21 @@ public class EndingController : MonoBehaviour
         if (BuildConstants.isWebGL)
         {
             endText.text = endText.text.Replace("ALT+F4 to QUIT :)", "");
+
         }
+        if (BuildConstants.isMobile)
+        {
+            continueButton.gameObject.SetActive(BuildConstants.isMobile);
+            continueButton.onClick.AddListener(delegate { PressContinue(); });
+        }
+
     }
+
+    private void PressContinue()
+    {
+        continuePressed = true;
+    }
+
     void Start()
     {
         LevelChanger.Instance.FadeIn();
@@ -24,8 +39,9 @@ public class EndingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || continuePressed)
         {
+            continuePressed = false;
             SaveManager.Instance.runtimeData.currentLevel = LevelChanger.Instance.GetLevels()[0];
             LevelChanger.Instance.FadeToLevel("PegoScene");
         }
