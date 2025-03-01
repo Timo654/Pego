@@ -125,7 +125,7 @@ public class UIController : MonoBehaviour
 
     private void UpdateScore(int score)
     {
-        DOVirtual.Int(currentScore, score, 1f, v => scoreText.text = $"SCORE\n{v:000000000}");
+        DOVirtual.Int(currentScore, score, 1f, v => scoreText.text = $"{v:000000000}");
         currentScore = score;
     }
 }

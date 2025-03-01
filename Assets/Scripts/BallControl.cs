@@ -24,7 +24,7 @@ public class BallControl : MonoBehaviour
         spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         lr = GetComponent<LineRenderer>();
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
     private void OnEnable()
@@ -87,11 +87,11 @@ public class BallControl : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0))
             {
-                rb.isKinematic = false;
+                rb.bodyType = RigidbodyType2D.Dynamic;
                 hasShot = true;
                 Vector2 dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 _velocity = Vector2.ClampMagnitude((dragEndPos - dragStartPos) * power, 15f);
-                rb.velocity = _velocity;
+                rb.linearVelocity = _velocity;
                 lr.positionCount = 0;
                 rb.constraints = RigidbodyConstraints2D.None;
                 OnShot?.Invoke();
@@ -113,10 +113,10 @@ public class BallControl : MonoBehaviour
     private void ResetBall()
     {
         spriteRenderer.DOFade(0f, 0f);
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.rotation = 0f;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
         transform.position = referencePos;
         isGone = false;
         spriteRenderer.DOFade(1f, 0.2f).OnComplete(() => hasShot = false);
@@ -126,7 +126,7 @@ public class BallControl : MonoBehaviour
         Vector2[] results = new Vector2[steps];
         float timestep = Time.fixedDeltaTime / Physics2D.velocityIterations * stepDistance;
         Vector2 gravityAccel = rigidbody.gravityScale * timestep * timestep * Physics2D.gravity;
-        float drag = 1f - timestep * rigidbody.drag;
+        float drag = 1f - timestep * rigidbody.linearDamping;
         Vector2 moveStep = velocity * timestep;
 
         for (int i = 0; i < steps; i++)

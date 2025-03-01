@@ -25,8 +25,15 @@ PluginImporter:
   - first:
       WebGL: WebGL
     second:
-      enabled: 1
+      enabled: 0
       settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 161631
+  packageName: FMOD for Unity (2.02)
+  packageVersion: 2.02.26
+  assetPath: Assets/Plugins/FMOD/platforms/html5/lib/2.0.19/libfmodstudio.a
+  uploadId: 733879
