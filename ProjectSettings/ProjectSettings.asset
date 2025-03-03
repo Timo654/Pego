@@ -142,7 +142,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.1.0.2
+  bundleVersion: 1.1.0.1
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -167,14 +167,14 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.timo654.pego
     Standalone: com.DefaultCompany.2DProject
-    WebGL: com.Timo654.Pego
+    WebGL: com.timo654.pego
   buildNumber:
-    Standalone: 2
+    Standalone: 3
     VisionOS: 0
-    iPhone: 2
+    iPhone: 3
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 3
+  AndroidBundleVersionCode: 4
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -725,7 +725,7 @@ PlayerSettings:
     Stadia: DOTWEEN
     Standalone: DOTWEEN
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN
+    WebGL: BUILD_TYPE_RETAIL;BUILD_PLATFORM_WEBGL;BUILD_ARCH_WEBGL;BUILD_BACKEND_IL2CPP;DOTWEEN
     Windows Store Apps: DOTWEEN
     XboxOne: DOTWEEN
     iPhone: DOTWEEN

@@ -10,7 +10,6 @@ public class DeleteDebugFiles : BuildAction, IPostBuildPerPlatformAction
 {
     public override void PerBuildExecute(BuildReleaseType releaseType, BuildPlatform platform, BuildArchitecture architecture, BuildScriptingBackend scriptingBackend, BuildDistribution distribution, DateTime buildTime, ref BuildOptions options, string configKey, string buildPath)
     {
-        Debug.Log("HELLO PLEASE FUCKING LOG BRO5");
         base.PerBuildExecute(releaseType, platform, architecture, scriptingBackend, distribution, buildTime, ref options, configKey, buildPath);
         string outputPath = buildPath;
         try
