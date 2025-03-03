@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BuildConstants
+public class BuildConsts
 {
     public static readonly string gameName = "Pego";
     public static bool isExpo = false;

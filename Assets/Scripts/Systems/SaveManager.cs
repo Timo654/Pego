@@ -16,7 +16,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     private void Awake()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        mPersistentDataPath = $"idbfs/{BuildConstants.gameName}"; 
+        mPersistentDataPath = $"idbfs/{BuildConsts.gameName}"; 
 #else
         mPersistentDataPath = Application.persistentDataPath;
 #endif

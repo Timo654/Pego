@@ -5,7 +5,7 @@ public class PreloadConfig : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (BuildConstants.isMobile) Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
-        if (BuildConstants.isWebGL) Application.runInBackground = false;
+        if (BuildConsts.isMobile) Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
+        if (BuildConsts.isWebGL) Application.runInBackground = false;
     }
 }

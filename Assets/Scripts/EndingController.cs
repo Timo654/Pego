@@ -13,14 +13,14 @@ public class EndingController : MonoBehaviour
         SaveManager.Instance.gameData.lastPlayedLevel = 1; // reset to start of the game
         AudioManager.Instance.InitializeMusic(FMODEvents.Instance.CreditsTheme);
         AudioManager.Instance.StartMusic();
-        if (BuildConstants.isWebGL)
+        if (BuildConsts.isWebGL)
         {
             endText.text = endText.text.Replace("ALT+F4 to QUIT :)", "");
 
         }
-        if (BuildConstants.isMobile)
+        if (BuildConsts.isMobile)
         {
-            continueButton.gameObject.SetActive(BuildConstants.isMobile);
+            continueButton.gameObject.SetActive(BuildConsts.isMobile);
             continueButton.onClick.AddListener(delegate { PressContinue(); });
         }
 
